@@ -1,0 +1,391 @@
+{
+	"info": {
+		"_postman_id": "32713df3-bb66-49bc-8408-fbca3ee764f6",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "业务中台test",
+			"item": [
+				{
+					"name": "湘教业务中台-登录",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseData = JSON.parse(responseBody)\r",
+									"pm.globals.set(\"token\", responseData.data.token)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.expect(pm.response.responseTime).to.be.below(2000);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "https://apitest.zjld.com/ywzt/auth?userName=xjadmin&password=xjadmin&Content-Type=application/json",
+							"protocol": "https",
+							"host": [
+								"apitest",
+								"zjld",
+								"com"
+							],
+							"path": [
+								"ywzt",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "userName",
+									"value": "xjadmin"
+								},
+								{
+									"key": "password",
+									"value": "xjadmin"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "现金费用充值-新增",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var currentTime = new Date().toLocaleString(\"en-US\", { \r",
+									"  year: 'numeric',\r",
+									"  month: '2-digit',\r",
+									"  day: '2-digit',\r",
+									"  hour: '2-digit',\r",
+									"  minute: '2-digit',\r",
+									"  second: '2-digit'\r",
+									"}).replace(',', '');\r",
+									"pm.variables.set(\"current_time\", currentTime);\r",
+									"pm.environment.set(\"current_time\", currentTime);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.expect(pm.response.responseTime).to.be.below(2000);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"costType\": \"46\",\r\n\t\"costYear\": \"2024\",\r\n\t\"createName\": \"湘窖酒业后台管理员\",\r\n\t\"createTime\": \"{{current_time}}\",\r\n\t\"createUser\": \"20200309-VATS-BF81-AF8C-000000000152\",\r\n\t\"custId\": \"8611\",\r\n\t\"custName\": \"影刀测试\",\r\n\t\"orgName\": \"湖南湘窖酒业销售有限公司\",\r\n\t\"orgid\": 27,\r\n\t\"rechargeAmount\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://apitest.zjld.com/ywzt/poCostCashCheck/add",
+							"protocol": "https",
+							"host": [
+								"apitest",
+								"zjld",
+								"com"
+							],
+							"path": [
+								"ywzt",
+								"poCostCashCheck",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "现金费用充值-查询",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var currentDate = new Date();\r",
+									"var year = currentDate.getFullYear();\r",
+									"var month = (currentDate.getMonth() + 1).toString().padStart(2, '0');\r",
+									"var day = currentDate.getDate().toString().padStart(2, '0');\r",
+									"\r",
+									"var startDate = year + '-' + month + '-' + day + ' 00:00:00';\r",
+									"var endDate = year + '-' + month + '-' + day + ' 23:59:59';\r",
+									"\r",
+									"pm.variables.set('startDateTime', startDate);\r",
+									"pm.variables.set('endDateTime', endDate);\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"\r",
+									"// 解析响应体为JSON对象\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"// 获取记录列表\r",
+									"var recordList = jsonData.data.list;\r",
+									"\r",
+									"// 初始化最大id和最大记录\r",
+									"var maxId = null;\r",
+									"var maxRecord = null;\r",
+									"\r",
+									"// 遍历记录列表\r",
+									"for (var i = 0; i < recordList.length; i++) {\r",
+									"    var record = recordList[i];\r",
+									"    var recordId = parseInt(record.id);\r",
+									"\r",
+									"    // 比较id大小，更新最大id和最大记录\r",
+									"    if (maxId === null || recordId > maxId) {\r",
+									"        maxId = recordId;\r",
+									"        maxRecord = record;\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"// 打印最大id和最大记录\r",
+									"console.log(\"最大id的记录是：\", maxId);\r",
+									"pm.environment.set(\"最大id\", maxId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"auditEndDate\": \"\",\r\n\t\"auditStartDate\": \"\",\r\n    \"auditState\":\"1\",\r\n\t\"auditUser\": \"\",\r\n\t\"costType\": \"\",\r\n\t\"custId\": \"8611\",\r\n\t\"custName\": \"影刀测试\",\r\n\t\"deptList\": [] ,\r\n    \"endTime\": \"{{endDateTime}} 23:59:59\",\r\n\t\"pageNo\":\"1\",\r\n    \"pageSize\":\"10\",\r\n    \"startTime\":\"{{startDateTime}} 00:00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://apitest.zjld.com/ywzt/poCostCashCheck/listByPage",
+							"protocol": "https",
+							"host": [
+								"apitest",
+								"zjld",
+								"com"
+							],
+							"path": [
+								"ywzt",
+								"poCostCashCheck",
+								"listByPage"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "现金费用充值-删除",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.expect(pm.response.responseTime).to.be.below(2000);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://apitest.zjld.com/ywzt/poCostCashCheck/delete?id={{最大id}}",
+							"protocol": "https",
+							"host": [
+								"apitest",
+								"zjld",
+								"com"
+							],
+							"path": [
+								"ywzt",
+								"poCostCashCheck",
+								"delete"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{最大id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
